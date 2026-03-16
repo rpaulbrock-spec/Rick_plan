@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Programme</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#1A3A5C; --navy2:#0D2340; --navy3:#2A5A8C;
+  --steel:#B2C4DA; --steel2:#E8EEF5;
+  --gold:#C9953A; --gold-light:#FDF3E0;
+  --green:#2E7D4F; --green-light:#EAF4EE;
+  --red:#8B1A1A; --red-light:#FAEAEA;
+  --slate:#4A6B6B; --slate-light:#E8EEEE;
+  --dark:#080F1A; --mid:#2A4A6A; --soft:#5A7A9A;
+  --bg:#0D1A2A; --card:#111E2E; --card2:#162336;
+  --border:#1E3550; --border2:#243D5A;
+  --text:#E8EEF5; --text2:#A0B8D0;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+.hero{background:linear-gradient(135deg,var(--navy2) 0%,var(--navy) 60%,var(--navy3) 100%);padding:36px 24px 28px;position:relative;overflow:hidden;}
+.hero::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:40px;background:linear-gradient(to bottom,transparent,var(--bg));}
+.hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 30px,rgba(255,255,255,0.015) 30px,rgba(255,255,255,0.015) 31px);}
+.hero-inner{max-width:900px;margin:0 auto;position:relative;}
+.hero-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:3px;color:var(--steel);margin-bottom:8px;}
+.hero-title{font-family:'Barlow Condensed',sans-serif;font-size:52px;font-weight:900;color:#fff;line-height:.95;margin-bottom:8px;text-transform:uppercase;letter-spacing:-1px;}
+.hero-title span{color:var(--gold);}
+.hero-sub{font-size:14px;color:var(--text2);margin-bottom:20px;}
+.hero-stats{display:flex;gap:12px;flex-wrap:wrap;}
+.stat{background:rgba(255,255,255,0.06);border:1px solid var(--border2);border-radius:8px;padding:10px 16px;}
+.stat-val{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:var(--gold);display:block;}
+.stat-lbl{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);}
+
+.nav-wrap{background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;}
+.nav{max-width:900px;margin:0 auto;display:flex;overflow-x:auto;scrollbar-width:none;}
+.nav::-webkit-scrollbar{display:none;}
+.nav-btn{flex-shrink:0;padding:14px 18px;border:none;background:none;cursor:pointer;font-family:'Barlow',sans-serif;font-size:13px;font-weight:600;color:var(--text2);border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;}
+.nav-btn:hover{color:var(--gold);background:rgba(201,149,58,.08);}
+.nav-btn.active{color:var(--gold);border-bottom-color:var(--gold);}
+
+.content{max-width:900px;margin:0 auto;padding:24px 16px 48px;}
+.section{display:none;}
+.section.active{display:block;}
+
+.week-strip{display:flex;gap:6px;margin-bottom:20px;overflow-x:auto;padding-bottom:4px;}
+.day-pill{flex-shrink:0;padding:9px 14px;border-radius:6px;border:1px solid var(--border2);background:var(--card);cursor:pointer;text-align:center;transition:all .15s;}
+.day-pill:hover{border-color:var(--gold);background:var(--card2);}
+.day-pill.active{background:var(--navy);border-color:var(--gold);color:var(--gold);}
+.day-pill.rest{opacity:.6;}
+.dp-name{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;display:block;}
+.dp-type{font-size:10px;color:var(--text2);display:block;margin-top:1px;}
+.day-pill.active .dp-type{color:var(--steel);}
+
+.day-panel{display:none;}
+.day-panel.active{display:block;}
+
+.banner{border-radius:6px 6px 0 0;padding:9px 14px;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;gap:8px;margin-top:16px;}
+.b-navy{background:var(--navy);color:var(--gold);}
+.b-gold{background:var(--gold);color:#fff;}
+.b-green{background:var(--green);color:#fff;}
+.b-slate{background:var(--slate);color:#fff;}
+.b-red{background:var(--red);color:#fff;}
+
+.card-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:0 0 8px 8px;margin-bottom:3px;overflow:hidden;}
+.card-table th{background:var(--card2);padding:8px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--text2);text-align:left;border-bottom:1px solid var(--border);}
+.card-table td{padding:10px 12px;font-size:13px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top;}
+.card-table tr:last-child td{border-bottom:none;}
+.card-table tr:nth-child(even) td{background:rgba(255,255,255,0.02);}
+.badge-s{background:rgba(201,149,58,.2);color:var(--gold);font-weight:700;font-size:12px;padding:2px 7px;border-radius:4px;font-family:'Barlow Condensed',sans-serif;}
+.em{color:var(--gold);font-weight:600;}
+
+.meal-day-panel{display:none;}
+.meal-day-panel.active{display:block;}
+.meal-grid{display:flex;flex-direction:column;gap:8px;margin-top:10px;}
+.meal-card{background:var(--card);border-radius:8px;border-left:3px solid var(--navy3);padding:12px 14px;}
+.meal-card.shake{border-left-color:var(--gold);}
+.meal-card.pre{border-left-color:var(--green);}
+.meal-card.snack{border-left-color:var(--slate);}
+.meal-time{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text2);margin-bottom:3px;}
+.meal-name{font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px;}
+.meal-detail{font-size:12px;color:var(--text2);}
+.meal-macro{display:inline-block;background:rgba(201,149,58,.15);color:var(--gold);font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;margin-top:5px;}
+
+.supp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;margin-top:12px;}
+.supp-card{background:var(--card);border-radius:10px;padding:14px 16px;border-top:3px solid var(--gold);}
+.supp-name{font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px;}
+.supp-dose{font-size:13px;color:var(--gold);font-weight:600;margin-bottom:4px;}
+.supp-timing{font-size:12px;color:var(--text2);}
+.supp-note{font-size:11px;color:var(--soft);margin-top:4px;font-style:italic;}
+
+.info{background:rgba(42,90,140,.25);border-left:3px solid var(--navy3);border-radius:0 6px 6px 0;padding:10px 14px;font-size:13px;color:var(--text2);margin:8px 0;}
+.warn{background:rgba(201,149,58,.12);border-left:3px solid var(--gold);border-radius:0 6px 6px 0;padding:10px 14px;font-size:13px;color:var(--text);margin:8px 0;}
+
+.overview-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:10px;overflow:hidden;}
+.overview-table th{background:var(--navy);color:var(--gold);padding:10px 12px;font-size:11px;font-family:'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:1px;text-align:left;}
+.overview-table td{padding:10px 12px;font-size:13px;border-bottom:1px solid var(--border);color:var(--text);}
+.overview-table tr:last-child td{border-bottom:none;}
+.overview-table tr:nth-child(even) td{background:rgba(255,255,255,0.02);}
+.tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700;}
+.tag-w{background:rgba(42,90,140,.4);color:var(--steel);}
+.tag-rest{background:rgba(74,107,107,.3);color:var(--slate-light);}
+
+.macro-bar{background:var(--card2);border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.macro-bar h3{font-family:'Barlow Condensed',sans-serif;font-size:16px;color:var(--gold);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.macro-row{display:flex;gap:16px;flex-wrap:wrap;}
+.macro-item{font-size:13px;color:var(--text2);}
+.macro-item strong{color:var(--text);font-size:15px;}
+
+@media(max-width:600px){
+  .hero-title{font-size:38px;}
+  .supp-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">12-Week Programme</div>
+    <div class="hero-title">YOUR <span>TRAINING</span> GUIDE</div>
+    <div class="hero-sub">6 days weights · Sunday active recovery · 103.5kg → 95kg</div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-val">6</span><span class="stat-lbl">Training Days</span></div>
+      <div class="stat"><span class="stat-val">2,800</span><span class="stat-lbl">Target Kcal</span></div>
+      <div class="stat"><span class="stat-val">175g</span><span class="stat-lbl">Protein Target</span></div>
+      <div class="stat"><span class="stat-val">8.3kg</span><span class="stat-lbl">Fat to Lose</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="nav-wrap">
+  <div class="nav">
+    <button class="nav-btn active" onclick="showSection('training')">🏋️ Training</button>
+    <button class="nav-btn" onclick="showSection('meals')">🥗 Meals</button>
+    <button class="nav-btn" onclick="showSection('supplements')">💊 Supplements</button>
+    <button class="nav-btn" onclick="showSection('overview')">📅 Week Overview</button>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ══════════ TRAINING ══════════ -->
+<div class="section active" id="section-training">
+  <div class="week-strip">
+    <div class="day-pill active" onclick="showDay('mon')"><span class="dp-name">Mon</span><span class="dp-type">Chest/Tri</span></div>
+    <div class="day-pill" onclick="showDay('tue')"><span class="dp-name">Tue</span><span class="dp-type">Back/Bi</span></div>
+    <div class="day-pill" onclick="showDay('wed')"><span class="dp-name">Wed</span><span class="dp-type">Legs/Shoulders</span></div>
+    <div class="day-pill" onclick="showDay('thu')"><span class="dp-name">Thu</span><span class="dp-type">Chest/Shoulders</span></div>
+    <div class="day-pill" onclick="showDay('fri')"><span class="dp-name">Fri</span><span class="dp-type">Back/Arms</span></div>
+    <div class="day-pill" onclick="showDay('sat')"><span class="dp-name">Sat</span><span class="dp-type">Legs/Core</span></div>
+    <div class="day-pill rest" onclick="showDay('sun')"><span class="dp-name">Sun</span><span class="dp-type">Recovery</span></div>
+  </div>
+
+  <!-- MON -->
+  <div class="day-panel active" id="day-mon">
+    <div class="info">Day 1 — Chest & Triceps · Burn: ~320 kcal gross / ~242 kcal net</div>
+
+    <div class="banner b-navy">🌅 Warm-Up — 5–8 mins</div>
+    <table class="card-table">
+      <thead><tr><th>Exercise</th><th>Reps</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Band pull-aparts</td><td>15</td><td>Warm up rear delts and upper back</td></tr>
+        <tr><td>Wall slides</td><td>10</td><td>Back flat, arms overhead</td></tr>
+        <tr><td>Press-up to deep stretch</td><td>8</td><td>Push-up, drive hip to floor, open chest</td></tr>
+        <tr><td>Shoulder CARs</td><td>5 each arm</td><td>Full controlled shoulder circles</td></tr>
+        <tr><td>Light DB chest press (warm-up weight)</td><td>15</td><td>Activate pec, find shoulder position</td></tr>
+      </tbody>
+    </table>
+
+    <div class="banner b-navy">🏋️ Main Lifts</div>
+    <table class="card-table">
+      <thead><tr><th>Exercise</th><th>Sets</th><th>Reps</th><th>Rest</th><th>Cue</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Barbell Bench Press</strong></td><td><span class="badge-s">4</span></td><td>5–7</td><td>2 min</td><td>Touch chest, full press — think 'spread the bar' to keep chest engaged</td></tr>
+        <tr><td><strong>Incline Dumbbell Press</strong></td><td><span class="badge-s">3</span></td><td>8–10</td><td>90 sec</td><td>30–45°, elbows at 45° to torso</td></tr>
+        <tr><td><strong>Cable / Machine Chest Fly</strong></td><td><span class="badge-s">3</span></td><td>12–15</td><td>75 sec</td><td>Stretch at bottom, squeeze at top</td></tr>
+      </tbody>
+    </table>
+
+    <div class="banner b-gold">💪 Accessory</div>
+    <table class="card-table">
+      <thead><tr><th>Exercise</th><th>Sets</th><th>Reps</th><th>Rest</th><th>Cue</th></tr></thead>
+      <tbody>
+        <tr><td>Tricep Rope Pushdown</td><td><span class="badge-s">3</span></td><td>12–15</td><td>60 sec</td><td>Elbows locked at sides, extend fully</td></tr>
+        <tr><td>Overhead Tricep Extension</td><td><span class="badge-s">3</span></td><td>10–12</td><td>60 sec</td><td>Full stretch overhead, slow tempo</td></tr>
+        <tr><td>Chest-Supported DB Row</td><td><span class="badge-s">3</span></td><td>10–12</td><td>75 sec</td><td>Chest on incline bench, row to hip</td></tr>
+      </tbody>
+    </table>
+
+    <div class="banner b-slate">🧘 Cool-Down</div>
+    <table class="card-table">
+      <thead><tr><th>Stretch</th><th>Hold</th></tr></thead>
+      <tbody>
+        <tr><td>Doorframe chest stretch</td><td>45 sec each side</td></tr>
+        <tr><td>Cross-body shoulder stretch</td><td>30 sec each side</td></tr>
+        <tr><td>Lat stretch overhead</td><td>45 sec each side</td></tr>
+        <tr><td>Child's pose</td><td>60 sec</td></tr>
+        <tr><td>Thoracic rotation seated</td><td>30 sec each side</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- TUE -->
+  <div class="day-panel" id="day-tue">
+    <div class="info">Day 2 — Back & Biceps · Burn: ~330 kcal gross / ~250 kcal net</div>
+
+    <div class="banner b-navy">🌅 Warm-Up</div>
+    <table class="card-table">
+      <thead><tr><th>Exercise</th><th>Reps</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Dead hang</td><td>30 sec</td><td>Passive shoulder decompression</td></tr>
+        <tr><td>Band pull-aparts</td><td>15</td><td>Light band, arms straight</td></tr>
+        <tr><td>Cat-cow</td><td>10</td><td>Mobilise thoracic spine</td></tr>
+        <tr><td>Scapular pull-ups</td><td>10</td><td>Hang, depress and retract scapulae only — no elbow bend</td></tr>
+        <tr><td>Light lat pulldown (warm-up)</td><td>15</td><td>Feel the lat engagement</td></tr>
+      </tbody>
+    </table>
+
+    <div class="banner b-navy">🏋️ Main Lifts</div>
+    <table class="card-table">
+      <thead><tr><th>Exercise</th><th>Sets</th><th>Reps</th><th>Rest</th><th>Cue</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Barbell Bent-Over Row</strong></td><td><span class="badge-s">4</span></td><td>6–8</td><td>2 min</td><td>Torso parallel to floor, bar to lower chest — not navel</td></tr>
+        <tr><td><strong>Wide-Grip Lat Pulldown</strong></td><td><span class="badge-s">3</span></td><td>8–10</td><td>90 sec</td><td>Full stretch at top, pull to upper chest</td></tr>
+        <tr><td><strong>Seated Cable Row (close grip)</strong></td><td><span class="badge-s">3</span></td><td>10–12</td><td>90 sec</td><td>Elbows back, squeeze at contraction</td></tr>
+      </tbody>
+    </table>
+
+    <div class="banner b-gold">💪 Accessory</div>
+    <table class="card-table">
+      <thead><tr><th>Exercise</th><th>Sets</th><th>Reps</th><th>Rest</th><th>Cue</th></tr></thead>
+      <tbody>
+        <tr><td>Barbell / DB Bicep Curl</td><td><span class="badge-s">3</span></td><td>10–12</td><td>60 sec</td><td>Full extension at bottom, no swinging</td></tr>
+        <tr><td>Hammer Curl</td><td><span class="badge-s">3</span></td><td>10–12</td><td>60 sec</td><td>Neutral grip, controlled tempo</td></tr>
+        <tr><td>Face Pull</td><td><span class="badge-s">3</span></td><td>15</td><td>60 sec</td><td>High pulley, elbows high, external rotation</td></tr>
+      </tbody>
+    </table>
+
+    <div class="banner b-slate">🧘 Cool-Down</div>
+    <table class="card-table">
+      <thead><tr><th>Stretch</th><th>Hold</th></tr></thead>
+      <tbody>
+        <tr><td>Lat stretch — arm overhead on wall</td><td>45 sec each side</td></tr>
+        <tr><td>Child's pose with arm reach</td><td>60 sec each side</td></tr>
+        <tr><td>Supine spinal twist</td><td>45 sec each side</td></tr>
+        <tr><td>Neck side stretch</td><td>30 sec each side</td></tr>
+        <tr><td>Thread the needle</td><td>30 sec each side</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- WED -->
+  <div class="day-panel" id="day-wed">
+    <div class="info">Day 3 — Legs & Shoulders · Burn: ~380 kcal gross / ~288 kcal net — heaviest calorie burn day</div>
+
+    <div class="banner b-navy">🌅 Warm-Up</div>
+    <table class="card-table">
+      <thead><tr><th>Exercise</th><th>Reps</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Hip 90/90 stretch</td><td>60 sec each side</td><td>Internal and external hip rotation</td></tr>
+        <tr><td>Goblet squat (light)</td><td>10</td><td>Knees tracking, full depth</td></tr>
+        <tr><td>Leg swings — front to back</td><td>10 each leg</td><td>Hold wall</td></tr>
+        <tr><td>Ankle circles</td><td>10 each direction</td><td>Improves squat depth</td></tr>
+        <tr><td>Band pull-aparts</td><td>15</td><td>Shoulder warm-up</td></tr>
+      </tbody>
+    </table>
+
+    <div class="banner b-navy">🏋️ Main Lifts</div>
+    <table class="card-table">
+      <thead><tr><th>Exercise</th><th>Sets</th><th>Reps</th><th>Rest</th><th>Cue</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Barbell Back Squat</strong></td><td><span class="badge-s">4</span></td><td>5–7</td><td>2 min</td><td>Full depth, chest up, knees out — depth before load</td></tr>
+        <tr><td><strong>Romanian Deadlift</strong></td><td><span class="badge-s">3</span></td><td>8–10</td><td>90 sec</td><td>Hip hinge, push hips back, feel the hamstring stretch</td></tr>
+        <tr><td><strong>Barbell Overhead Press</strong></td><td><span class="badge-s">3</span></td><td>6–8</td><td>90 sec</td><td>Brace core, press straight, lower to collarbone</td></tr>
+      </tbody>
+    </table>
+
+    <div class="banner b-gold">💪 Accessory</div>
+    <table class="card-table">
+      <thead><tr><th>Exercise</th><th>Sets</th><th>Reps</th><th>Rest</th><th>Cue</th></tr></thead>
+      <tbody>
+        <tr><td>Leg Press</td><td><span class="badge-s">3</span></td><td>12–15</td><td>90 sec</td><td>Full depth, feet hip-width, drive through heels</td></tr>
+        <tr><td>Lateral DB Raise</td><td><span class="badge-s">3</span></td><td>12–15</td><td>60 sec</td><td>Slight forward lean, lead with elbows</td></tr>
+        <tr><td>Leg Curl (machine)</td><td><span class="badge-s">3</span></td><td>12–15</td><td>75 sec</td><td>Full extension, 2 sec hold at contraction</td></tr>
+      </tbody>
+    </table>
+
+    <div class="banner b-slate">🧘 Cool-Down</div>
+    <table class="card-table">
+      <thead><tr><th>Stretch</th><th>Hold</th></tr></thead>
+      <tbody>
+        <tr><td>Pigeon pose</td><td>60 sec each side</td></tr>
+        <tr><td>Hip flexor lunge stretch</td><td>45 sec each side</td></tr>
+        <tr><td>Supine hamstring stretch</td><td>60 sec each side</td></tr>
+        <tr><td>Standing quad stretch</td><td>30 sec each side</td></tr>
+        <tr><td>Legs up the wall</td><td>2 min</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- THU -->
+  <div class="day-panel" id="day-thu">
+    <div class="info">Day 4 — Chest & Shoulders · Burn: ~310 kcal gross / ~235 kcal net</div>
+    <div class="warn">Second push day — if shoulders feel fatigued from Monday, reduce overhead press load by 10–15% and prioritise form.</div>
+
+    <div class="banner b-navy">🌅 Warm-Up</div>
+    <table class="card-table">
+      <thead><tr><th>Exercise</th><th>Reps</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Wall slides</td><td>10</td><td>Thoracic extension and shoulder mobility</td></tr>
+        <tr><td>Band pull-aparts</td><td>15</td><td>Rear delt warm-up</td></tr>
+        <tr><td>Press-up to deep stretch</td><td>8</td><td>Pec activation</td></tr>
+        <tr><td>DB lateral raise (light)</td><td>15</td><td>Shoulder warm-up</td></tr>
+        <tr><td>Shoulder CARs</td><td>5 each arm</td><td>Full range of motion</td></tr>
+      </tbody>
+    </table>
+
+    <div class="banner b-navy">🏋️ Main Lifts</div>
+    <table class="card-table">
+      <thead><tr><th>Exercise</th><th>Sets</th><th>Reps</th><th>Rest</th><th>Cue</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Dumbbell Flat Press</strong></td><td><span class="badge-s">4</span></td><td>8–10</td><td>90 sec</td><td>Full range, elbows at 45°, controlled descent</td></tr>
+        <tr><td><strong>Cable / Machine Chest Fly</strong></td><td><span class="badge-s">3</span></td><td>12–15</td><td>75 sec</td><td>Maximise stretch at bottom</td></tr>
+        <tr><td><strong>Dumbbell Shoulder Press</strong></td><td><span class="badge-s">3</span></td><td>8–10</td><td>90 sec</td><td>Drive overhead, lower controlled</td></tr>
+      </tbody>
+    </table>
+
+    <div class="banner b-gold">💪 Accessory</div>
+    <table class="card-table">
+      <thead><tr><th>Exercise</th><th>Sets</th><th>Reps</th><th>Rest</th><th>Cue</th></tr></thead>
+      <tbody>
+        <tr><td>Lateral DB Raise</td><td><span class="badge-s">3</span></td><td>15</td><td>60 sec</td><td>Slow eccentric — 3 sec lower</td></tr>
+        <tr><td>Cable Rear Delt Fly</td><td><span class="badge-s">3</span></td><td>15</td><td>60 sec</td><td>Slight forward lean, elbows slightly bent</td></tr>
+        <tr><td>Push-Up to Failure</td><td><span class="badge-s">2</span></td><td>Max</td><td>90 sec</td><td>Track reps each week — progressive benchmark</td></tr>
+      </tbody>
+    </table>
+
+    <div class="banner b-slate">🧘 Cool-Down</div>
+    <table class="card-table">
+      <thead><tr><th>Stretch</th><th>Hold</th></tr></thead>
+      <tbody>
+        <tr><td>Doorframe chest stretch</td><td>45 sec each side</td></tr>
+        <tr><td>Overhead lat stretch</td><td>45 sec each side</td></tr>
+        <tr><td>Cross-body shoulder stretch</td><td>30 sec each side</td></tr>
+        <tr><td>Child's pose</td><td>60 sec</td></tr>
+        <tr><td>Thoracic rotation seated</td><td>30 sec each side</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- FRI -->
+  <div class="day-panel" id="day-fri">
+    <div class="info">Day 5 — Back & Arms · Burn: ~325 kcal gross / ~246 kcal net</div>
+    <div class="warn">Second pull day after Thursday push. If recovery feels insufficient, swap weighted pull-up to lat pulldown and reduce loads slightly — volume over intensity when fatigued.</div>
+
+    <div class="banner b-navy">🌅 Warm-Up</div>
+    <table class="card-table">
+      <thead><tr><th>Exercise</th><th>Reps</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Dead hang</td><td>30 sec</td><td>Shoulder decompression</td></tr>
+        <tr><td>Band pull-aparts</td><td>15</td><td>Upper back warm-up</td></tr>
+        <tr><td>Scapular pull-ups</td><td>10</td><td>Controlled — feel the shoulder blade movement</td></tr>
+        <tr><td>Cat-cow</td><td>10</td><td>Spinal mobility</td></tr>
+        <tr><td>Light row (warm-up)</td><td>15</td><td>Cable or band — lat engagement</td></tr>
+      </tbody>
+    </table>
+
+    <div class="banner b-navy">🏋️ Main Lifts</div>
+    <table class="card-table">
+      <thead><tr><th>Exercise</th><th>Sets</th><th>Reps</th><th>Rest</th><th>Cue</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Weighted Pull-Up / Lat Pulldown</strong></td><td><span class="badge-s">4</span></td><td>6–8</td><td>2 min</td><td>Full hang, pull chin over bar, controlled descent</td></tr>
+        <tr><td><strong>Single-Arm Dumbbell Row</strong></td><td><span class="badge-s">3</span></td><td>10–12 each</td><td>90 sec</td><td>Chest on bench, drive elbow back, squeeze at top</td></tr>
+        <tr><td><strong>Straight-Arm Cable Pulldown</strong></td><td><span class="badge-s">3</span></td><td>12–15</td><td>75 sec</td><td>Arms straight, drive elbows to hips — lats only</td></tr>
+      </tbody>
+    </table>
+
+    <div class="banner b-gold">💪 Accessory</div>
+    <table class="card-table">
+      <thead><tr><th>Exercise</th><th>Sets</th><th>Reps</th><th>Rest</th><th>Cue</th></tr></thead>
+      <tbody>
+        <tr><td>EZ Bar Curl</td><td><span class="badge-s">3</span></td><td>10–12</td><td>60 sec</td><td>Full extension, supinate at top</td></tr>
+        <tr><td>Incline DB Curl</td><td><span class="badge-s">3</span></td><td>12</td><td>60 sec</td><td>Full stretch at bottom — great for long head bicep</td></tr>
+        <tr><td>Tricep Overhead Extension</td><td><span class="badge-s">3</span></td><td>12</td><td>60 sec</td><td>Full stretch, slow tempo</td></tr>
+      </tbody>
+    </table>
+
+    <div class="banner b-slate">🧘 Cool-Down</div>
+    <table class="card-table">
+      <thead><tr><th>Stretch</th><th>Hold</th></tr></thead>
+      <tbody>
+        <tr><td>Lat stretch — overhead</td><td>45 sec each side</td></tr>
+        <tr><td>Child's pose with arm reach</td><td>60 sec each side</td></tr>
+        <tr><td>Supine spinal twist</td><td>45 sec each side</td></tr>
+        <tr><td>Bicep wall stretch</td><td>30 sec each side</td></tr>
+        <tr><td>Thread the needle</td><td>30 sec each side</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SAT -->
+  <div class="day-panel" id="day-sat">
+    <div class="info">Day 6 — Legs & Core · Burn: ~370 kcal gross / ~280 kcal net — second highest calorie burn day</div>
+
+    <div class="banner b-navy">🌅 Warm-Up</div>
+    <table class="card-table">
+      <thead><tr><th>Exercise</th><th>Reps</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Hip 90/90 stretch</td><td>60 sec each side</td><td>Hip mobility</td></tr>
+        <tr><td>Glute bridges (bodyweight)</td><td>15</td><td>Activate posterior chain</td></tr>
+        <tr><td>Lateral band walks</td><td>12 each direction</td><td>Glute med activation</td></tr>
+        <tr><td>Goblet squat (light)</td><td>10</td><td>Movement prep</td></tr>
+        <tr><td>Ankle circles</td><td>10 each direction</td><td>Squat depth</td></tr>
+      </tbody>
+    </table>
+
+    <div class="banner b-navy">🏋️ Main Lifts</div>
+    <table class="card-table">
+      <thead><tr><th>Exercise</th><th>Sets</th><th>Reps</th><th>Rest</th><th>Cue</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Barbell Hip Thrust</strong></td><td><span class="badge-s">4</span></td><td>10–12</td><td>90 sec</td><td>Drive through heels, 2 sec pause at top — go first while freshest</td></tr>
+        <tr><td><strong>Bulgarian Split Squat</strong></td><td><span class="badge-s">3</span></td><td>10–12 each</td><td>90 sec</td><td>Torso slightly forward, feel glute not quad</td></tr>
+        <tr><td><strong>Sumo Deadlift</strong></td><td><span class="badge-s">3</span></td><td>8–10</td><td>2 min</td><td>Wide stance, toes out, push the floor away</td></tr>
+      </tbody>
+    </table>
+
+    <div class="banner b-gold">💪 Core</div>
+    <table class="card-table">
+      <thead><tr><th>Exercise</th><th>Sets</th><th>Reps</th><th>Rest</th><th>Cue</th></tr></thead>
+      <tbody>
+        <tr><td>Ab Roller</td><td><span class="badge-s">3</span></td><td>10–15</td><td>60 sec</td><td>Slow out, pull from core to return</td></tr>
+        <tr><td>Hanging Leg Raise</td><td><span class="badge-s">3</span></td><td>10–15</td><td>60 sec</td><td>Control the swing, don't kip</td></tr>
+        <tr><td>Cable Woodchop</td><td><span class="badge-s">3</span></td><td>12 each side</td><td>60 sec</td><td>Rotational core, controlled speed</td></tr>
+      </tbody>
+    </table>
+
+    <div class="banner b-slate">🧘 Cool-Down</div>
+    <table class="card-table">
+      <thead><tr><th>Stretch</th><th>Hold</th></tr></thead>
+      <tbody>
+        <tr><td>Pigeon pose</td><td>60 sec each side</td></tr>
+        <tr><td>Figure-4 glute stretch (lying)</td><td>45 sec each side</td></tr>
+        <tr><td>Hip flexor lunge stretch</td><td>45 sec each side</td></tr>
+        <tr><td>Supine hamstring stretch</td><td>60 sec each side</td></tr>
+        <tr><td>Legs up the wall</td><td>2 min</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SUN -->
+  <div class="day-panel" id="day-sun">
+    <div class="warn">Sunday — Active Recovery. Light walk, stretching, or complete rest. No structured training. Your body repairs and grows on rest days — this is part of the programme.</div>
+    <div class="banner b-slate">Optional Movement</div>
+    <table class="card-table">
+      <thead><tr><th>Activity</th><th>Duration</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Light walk</td><td>20–30 min</td><td>Easy pace — not cardio, just movement</td></tr>
+        <tr><td>Full-body stretch</td><td>15–20 min</td><td>Focus on whatever feels tight from the week</td></tr>
+        <tr><td>Foam rolling</td><td>10 min</td><td>Quads, hamstrings, lats, upper back</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════ MEALS ══════════ -->
+<div class="section" id="section-meals">
+  <div class="macro-bar">
+    <h3>Daily Targets</h3>
+    <div class="macro-row">
+      <div class="macro-item">Training days <strong>~2,800 kcal</strong></div>
+      <div class="macro-item">Rest day (Sun) <strong>~1,930 kcal</strong></div>
+      <div class="macro-item">Protein <strong>175g daily</strong></div>
+      <div class="macro-item">Shake included in training day total</div>
+    </div>
+  </div>
+  <div class="info">All weights are raw and uncooked unless stated. Your post-workout shake (2 scoops) is included in each training day's calorie total. Same recipe as Caroline's — you just use 2 scoops.</div>
+
+  <div class="week-strip">
+    <div class="day-pill active" onclick="showMealDay('mmon')"><span class="dp-name">Mon</span><span class="dp-type">Training</span></div>
+    <div class="day-pill" onclick="showMealDay('mtue')"><span class="dp-name">Tue</span><span class="dp-type">Training</span></div>
+    <div class="day-pill" onclick="showMealDay('mwed')"><span class="dp-name">Wed</span><span class="dp-type">Training</span></div>
+    <div class="day-pill" onclick="showMealDay('mthu')"><span class="dp-name">Thu</span><span class="dp-type">Training</span></div>
+    <div class="day-pill" onclick="showMealDay('mfri')"><span class="dp-name">Fri</span><span class="dp-type">Training</span></div>
+    <div class="day-pill" onclick="showMealDay('msat')"><span class="dp-name">Sat</span><span class="dp-type">Training</span></div>
+    <div class="day-pill rest" onclick="showMealDay('msun')"><span class="dp-name">Sun</span><span class="dp-type">Recovery</span></div>
+  </div>
+
+  <div id="meal-days">
+    <!-- MON -->
+    <div class="meal-day-panel active" id="mday-mmon">
+      <div class="meal-grid">
+        <div class="meal-card shake"><div class="meal-time">~11am — Post-workout shake</div><div class="meal-name">Shake 6 — Green Mango Glow (2 scoops)</div><div class="meal-detail">2 scoops whey + 80g Lidl kale & mango + 5g chia + 200ml almond milk + 50ml water</div><span class="meal-macro">~42g P / ~364 kcal</span></div>
+        <div class="meal-card"><div class="meal-time">8:30am — Breakfast</div><div class="meal-name">Scrambled eggs + oats + banana</div><div class="meal-detail">3 eggs + 40g oats + banana</div></div>
+        <div class="meal-card"><div class="meal-time">1:00pm — Lunch</div><div class="meal-name">Chicken breast + white rice + broccoli</div><div class="meal-detail">200g chicken + 125g white rice + broccoli</div></div>
+        <div class="meal-card snack"><div class="meal-time">3:30pm — Snack</div><div class="meal-name">Greek yogurt + berries + almonds</div><div class="meal-detail">200g yogurt + berries + 20g almonds</div></div>
+        <div class="meal-card"><div class="meal-time">6:30pm — Dinner</div><div class="meal-name">Salmon + small sweet potato + green beans</div><div class="meal-detail">180g salmon + small sweet potato + green beans</div></div>
+        <div class="meal-card snack"><div class="meal-time">9:00pm — Evening</div><div class="meal-name">Cottage cheese</div><div class="meal-detail">200g</div></div>
+      </div>
+    </div>
+    <!-- TUE -->
+    <div class="meal-day-panel" id="mday-mtue">
+      <div class="meal-grid">
+        <div class="meal-card shake"><div class="meal-time">~11am — Post-workout shake</div><div class="meal-name">Shake 5 — PB Berry Power (2 scoops)</div><div class="meal-detail">2 scoops whey + 60g mixed berries + 10g PB + 8g flax + 200ml almond milk</div><span class="meal-macro">~45g P / ~416 kcal</span></div>
+        <div class="meal-card"><div class="meal-time">8:30am — Breakfast</div><div class="meal-name">Poached eggs + toast + peanut butter</div><div class="meal-detail">2 eggs + 2 wholegrain toast + 1 tbsp PB</div></div>
+        <div class="meal-card"><div class="meal-time">1:00pm — Lunch</div><div class="meal-name">Tinned tuna + wrap + spinach</div><div class="meal-detail">150g tuna + wrap + spinach + cucumber</div></div>
+        <div class="meal-card snack"><div class="meal-time">3:30pm — Snack</div><div class="meal-name">Rice cakes + cottage cheese</div><div class="meal-detail">2 rice cakes + 100g cottage cheese + cucumber</div></div>
+        <div class="meal-card"><div class="meal-time">6:30pm — Dinner</div><div class="meal-name">Beef bolognese + wholewheat pasta</div><div class="meal-detail">200g lean beef mince + 125g wholewheat pasta + sauce</div></div>
+        <div class="meal-card snack"><div class="meal-time">9:00pm — Evening</div><div class="meal-name">Cottage cheese</div><div class="meal-detail">200g</div></div>
+      </div>
+    </div>
+    <!-- WED -->
+    <div class="meal-day-panel" id="mday-mwed">
+      <div class="meal-grid">
+        <div class="meal-card shake"><div class="meal-time">~11am — Post-workout shake</div><div class="meal-name">Shake 3 — Mixed Berry & Flax (2 scoops)</div><div class="meal-detail">2 scoops whey + 80g mixed berries + 8g milled flax + 200ml almond milk + 50ml water</div><span class="meal-macro">~42g P / ~366 kcal</span></div>
+        <div class="meal-card"><div class="meal-time">7:30am — Breakfast</div><div class="meal-name">Oats + almond butter</div><div class="meal-detail">40g oats + 1 tbsp almond butter</div></div>
+        <div class="meal-card"><div class="meal-time">1:00pm — Lunch</div><div class="meal-name">Turkey breast + brown rice + peppers</div><div class="meal-detail">200g turkey + 100g brown rice + peppers + spinach</div></div>
+        <div class="meal-card snack"><div class="meal-time">3:30pm — Snack</div><div class="meal-name">Greek yogurt + honey + walnuts</div><div class="meal-detail">200g yogurt + 1 tbsp honey + 20g walnuts</div></div>
+        <div class="meal-card"><div class="meal-time">6:30pm — Dinner</div><div class="meal-name">Chicken thigh + brown rice + courgette</div><div class="meal-detail">2 chicken thighs + 125g brown rice + courgette</div></div>
+        <div class="meal-card snack"><div class="meal-time">9:00pm — Evening</div><div class="meal-name">Cottage cheese</div><div class="meal-detail">200g</div></div>
+      </div>
+    </div>
+    <!-- THU -->
+    <div class="meal-day-panel" id="mday-mthu">
+      <div class="meal-grid">
+        <div class="meal-card shake"><div class="meal-time">~11am — Post-workout shake</div><div class="meal-name">Shake 2 — PB Banana Smoothie (2 scoops)</div><div class="meal-detail">2 scoops whey + 60g frozen banana + 10g PB + 200ml almond milk + 50ml water</div><span class="meal-macro">~44g P / ~406 kcal</span></div>
+        <div class="meal-card"><div class="meal-time">8:30am — Breakfast</div><div class="meal-name">3 egg omelette + mushrooms + spinach + toast</div><div class="meal-detail">3 eggs + mushrooms + spinach + 1 wholegrain toast</div></div>
+        <div class="meal-card"><div class="meal-time">1:00pm — Lunch</div><div class="meal-name">Tinned tuna + white rice + stir fry veg</div><div class="meal-detail">150g tuna + 125g white rice + stir fry veg + soy + ginger</div></div>
+        <div class="meal-card snack"><div class="meal-time">3:30pm — Snack</div><div class="meal-name">Apple + peanut butter + rice cake</div><div class="meal-detail">1 apple + 30g peanut butter + 1 rice cake</div></div>
+        <div class="meal-card"><div class="meal-time">6:30pm — Dinner</div><div class="meal-name">Cod + small jacket potato + asparagus</div><div class="meal-detail">200g cod + small jacket potato + asparagus</div></div>
+        <div class="meal-card snack"><div class="meal-time">9:00pm — Evening</div><div class="meal-name">Cottage cheese</div><div class="meal-detail">200g</div></div>
+      </div>
+    </div>
+    <!-- FRI -->
+    <div class="meal-day-panel" id="mday-mfri">
+      <div class="meal-grid">
+        <div class="meal-card shake"><div class="meal-time">~11am — Post-workout shake</div><div class="meal-name">Shake 1 — Summer Berry Blast (2 scoops)</div><div class="meal-detail">2 scoops whey + 80g summer fruits + 200ml almond milk + 5g chia + 50ml water</div><span class="meal-macro">~42g P / ~351 kcal</span></div>
+        <div class="meal-card"><div class="meal-time">8:30am — Breakfast</div><div class="meal-name">Scrambled eggs + tinned tuna + toast</div><div class="meal-detail">3 eggs + 100g tinned tuna + 1 wholegrain toast</div></div>
+        <div class="meal-card"><div class="meal-time">1:00pm — Lunch</div><div class="meal-name">Chicken thigh + sweet potato mash + broccoli</div><div class="meal-detail">200g chicken thigh + sweet potato + broccoli</div></div>
+        <div class="meal-card snack"><div class="meal-time">3:30pm — Snack</div><div class="meal-name">Greek yogurt + oats + banana</div><div class="meal-detail">200g yogurt + 25g oats + banana</div></div>
+        <div class="meal-card"><div class="meal-time">6:30pm — Dinner</div><div class="meal-name">Chicken thighs + new potatoes + mushrooms</div><div class="meal-detail">250g chicken thighs + 125g new potatoes + mushrooms + asparagus</div></div>
+        <div class="meal-card snack"><div class="meal-time">9:00pm — Evening</div><div class="meal-name">Cottage cheese</div><div class="meal-detail">200g</div></div>
+      </div>
+    </div>
+    <!-- SAT -->
+    <div class="meal-day-panel" id="mday-msat">
+      <div class="meal-grid">
+        <div class="meal-card shake"><div class="meal-time">~11am — Post-workout shake</div><div class="meal-name">Shake 4 — Strawberry & Banana (2 scoops)</div><div class="meal-detail">2 scoops whey + 80g banana & strawberry + 5g chia + 250ml almond milk</div><span class="meal-macro">~42g P / ~376 kcal</span></div>
+        <div class="meal-card"><div class="meal-time">8:30am — Breakfast</div><div class="meal-name">Spanish omelette + peppers + toast</div><div class="meal-detail">4 egg omelette + peppers + 2 toast</div></div>
+        <div class="meal-card"><div class="meal-time">1:00pm — Lunch</div><div class="meal-name">Turkey mince wrap</div><div class="meal-detail">200g turkey mince + wrap + lettuce + tomato + salsa</div></div>
+        <div class="meal-card snack"><div class="meal-time">3:00pm — Snack</div><div class="meal-name">Greek yogurt + banana + almonds</div><div class="meal-detail">200g yogurt + banana + 15g almonds</div></div>
+        <div class="meal-card"><div class="meal-time">6:30pm — Dinner</div><div class="meal-name">Lean beef stir fry + egg noodles</div><div class="meal-detail">200g lean beef + 95g egg noodles + stir fry veg + teriyaki</div></div>
+        <div class="meal-card snack"><div class="meal-time">9:00pm — Evening</div><div class="meal-name">Cottage cheese</div><div class="meal-detail">200g</div></div>
+      </div>
+    </div>
+    <!-- SUN -->
+    <div class="meal-day-panel" id="mday-msun">
+      <div class="meal-grid">
+        <div class="meal-card"><div class="meal-time">9:00am — Breakfast</div><div class="meal-name">Poached eggs + avocado + toast</div><div class="meal-detail">3 eggs + half avocado + 2 wholegrain toast + tomatoes</div></div>
+        <div class="meal-card"><div class="meal-time">1:00pm — Lunch (after shop)</div><div class="meal-name">Tinned salmon + salad + brown rice</div><div class="meal-detail">150g tinned salmon + large mixed salad + 100g brown rice</div></div>
+        <div class="meal-card snack"><div class="meal-time">3:30pm — Snack</div><div class="meal-name">Greek yogurt + blueberries + walnuts</div><div class="meal-detail">200g yogurt + blueberries + 15g walnuts + honey</div></div>
+        <div class="meal-card"><div class="meal-time">7:00pm — Dinner</div><div class="meal-name">Turkey meatballs + spaghetti</div><div class="meal-detail">200g turkey meatballs + 150g wholewheat spaghetti + sauce + parmesan</div></div>
+        <div class="meal-card snack"><div class="meal-time">9:00pm — Evening</div><div class="meal-name">Cottage cheese</div><div class="meal-detail">200g</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SUPPLEMENTS ══════════ -->
+<div class="section" id="section-supplements">
+  <div class="info">Protein target is 175g daily. Between food and your 2-scoop shake (~42–45g P), you're consistently hitting this. Supplements below are additional support on top of food and shakes.</div>
+  <div class="supp-grid">
+    <div class="supp-card"><div class="supp-name">⚡ Creatine Monohydrate</div><div class="supp-dose">5g daily</div><div class="supp-timing">With post-workout shake on training days. With breakfast on Sunday.</div><div class="supp-note">Supports strength output and recovery. Every day including rest day.</div></div>
+    <div class="supp-card"><div class="supp-name">☀️ Vitamin D3</div><div class="supp-dose">1,000–2,000 IU daily</div><div class="supp-timing">Training days: with post-workout shake. Sunday: with breakfast.</div><div class="supp-note">Fat-soluble — must be taken with food containing fat for proper absorption.</div></div>
+    <div class="supp-card"><div class="supp-name">🐟 Omega-3 Fish Oil</div><div class="supp-dose">1–2g EPA/DHA daily</div><div class="supp-timing">Same timing as Vitamin D3 — both taken together with food.</div><div class="supp-note">Anti-inflammatory support, joint health, cardiovascular benefit.</div></div>
+    <div class="supp-card"><div class="supp-name">🌙 Magnesium Glycinate</div><div class="supp-dose">300mg every evening</div><div class="supp-timing">With cottage cheese at 9:00pm — every night</div><div class="supp-note">Supports deep sleep and overnight muscle recovery. Six days of training demands this.</div></div>
+  </div>
+</div>
+
+<!-- ══════════ OVERVIEW ══════════ -->
+<div class="section" id="section-overview">
+  <table class="overview-table">
+    <thead><tr><th>Day</th><th>Session</th><th>Type</th><th>Shake</th><th>Est. Burn</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Monday</strong></td><td>Chest & Triceps</td><td><span class="tag tag-w">Weights</span></td><td>Shake 6 — Green Mango Glow</td><td>~320 kcal</td></tr>
+      <tr><td><strong>Tuesday</strong></td><td>Back & Biceps</td><td><span class="tag tag-w">Weights</span></td><td>Shake 5 — PB Berry Power</td><td>~330 kcal</td></tr>
+      <tr><td><strong>Wednesday</strong></td><td>Legs & Shoulders</td><td><span class="tag tag-w">Weights</span></td><td>Shake 3 — Mixed Berry & Flax</td><td>~380 kcal</td></tr>
+      <tr><td><strong>Thursday</strong></td><td>Chest & Shoulders</td><td><span class="tag tag-w">Weights</span></td><td>Shake 2 — PB Banana Smoothie</td><td>~310 kcal</td></tr>
+      <tr><td><strong>Friday</strong></td><td>Back & Arms</td><td><span class="tag tag-w">Weights</span></td><td>Shake 1 — Summer Berry Blast</td><td>~325 kcal</td></tr>
+      <tr><td><strong>Saturday</strong></td><td>Legs & Core</td><td><span class="tag tag-w">Weights</span></td><td>Shake 4 — Strawberry & Banana</td><td>~370 kcal</td></tr>
+      <tr><td><strong>Sunday</strong></td><td>Active recovery / walk</td><td><span class="tag tag-rest">Rest</span></td><td>None</td><td>~95 kcal</td></tr>
+    </tbody>
+  </table>
+  <div class="info" style="margin-top:12px">Weekly training burn: ~2,035 kcal from sessions alone. At a 2,800 kcal intake with ~30% body fat, projected fat loss is ~0.45–0.5kg per week. Keeping protein at 175g daily protects lean mass throughout the cut.</div>
+</div>
+
+</div>
+
+<script>
+function showSection(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('section-'+id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+function showDay(id){
+  document.querySelectorAll('.day-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('#section-training .day-pill').forEach(p=>p.classList.remove('active'));
+  document.getElementById('day-'+id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+function showMealDay(id){
+  document.querySelectorAll('.meal-day-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('#section-meals .day-pill').forEach(p=>p.classList.remove('active'));
+  document.getElementById('mday-'+id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+</script>
+</body>
+</html>
